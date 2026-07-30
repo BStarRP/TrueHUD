@@ -9,5 +9,6 @@
     "simpleini",
     "spdlog",
     "xbyak"
-  ]
+  ],
+  "builtin-baseline": "47205630845bd49eaf16cdfb757cf9dfba144c52"
 }
