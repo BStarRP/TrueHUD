@@ -18,6 +18,31 @@ namespace Utils
 
 	bool IsBehindPlayerCamera(const RE::NiPoint3& a_pos);
 
+	/** SkyMP SetAlpha drives fadeAlpha/currentFade (GetAlpha often stays 1). Gate only at full invis (0), not sneak fade. */
+	[[nodiscard]] inline bool IsActorConcealed(RE::Actor* a_actor)
+	{
+		if (!a_actor) {
+			return true;
+		}
+		if (a_actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kInvisibility) > 0.f) {
+			return true;
+		}
+		if (a_actor->GetAlpha() <= 0.f) {
+			return true;
+		}
+		if (const auto* process = a_actor->GetActorRuntimeData().currentProcess) {
+			if (const auto* high = process->high; high && high->fadeAlpha <= 0.f) {
+				return true;
+			}
+		}
+		if (auto* root = a_actor->Get3D()) {
+			if (const auto* fade = root->AsFadeNode(); fade && fade->GetRuntimeData().currentFade <= 0.f) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	inline bool FloatCompare(const float a, const float b)
 	{
 		double delta = fabs(a - b);

@@ -87,6 +87,7 @@ public:
 
 	void FlashActorValue(RE::ObjectRefHandle a_actorHandle, RE::ActorValue a_actorValue, bool a_bLong);
 	void FlashActorSpecialBar(RE::ObjectRefHandle a_actorHandle, bool a_bLong);
+	void SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering);
 
 	void DrawLine(const RE::NiPoint3& a_start, const RE::NiPoint3& a_end, float a_duration, uint32_t a_color, float a_thickness);
 	void DrawPoint(const RE::NiPoint3& a_position, float a_size, float a_duration, uint32_t a_color);

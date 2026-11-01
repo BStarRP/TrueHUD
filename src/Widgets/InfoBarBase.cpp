@@ -182,7 +182,7 @@ namespace Scaleform
 				} else {
 					bool r8 = false;
 					bool bHasLOS = playerCharacter->HasLineOfSight(actor, r8);
-					bool bVisible = bHasLOS && !(actor->AsActorValueOwner()->GetActorValue(RE::ActorValue::kInvisibility) > 0);
+					bool bVisible = bHasLOS && !Utils::IsActorConcealed(actor);
 					if (bVisible) {
 						SetWidgetState(WidgetStateMode::kShow);
 					} else {

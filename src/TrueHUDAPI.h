@@ -16,7 +16,9 @@ namespace TRUEHUD_API
 		V1,
 		V2,
 		V3,
-		V4
+		V4,
+		V5,
+		V6
 	};
 
 	// Error types that may be returned by the True HUD
@@ -383,6 +385,34 @@ namespace TRUEHUD_API
 		virtual void DrawCapsule(const RE::NiPoint3& a_vertexA, const RE::NiPoint3& a_vertexB, float a_radius, float a_duration = 0.f, uint32_t a_color = 0xFF0000FF, float a_thickness = 1.f) noexcept = 0;
 	};
 
+	class IVTrueHUD5 : public IVTrueHUD4
+	{
+	public:
+		/// <summary>
+		/// Show floating combat text at an actor (e.g. server-authoritative damage). Respects floating-text MCM toggles.
+		/// </summary>
+		/// <param name="a_actorHandle">Actor to anchor the number on</param>
+		/// <param name="a_damage">Positive damage amount to display</param>
+		/// <param name="a_color">RGB color (e.g. 0xFFFFFF outgoing, 0xFF0000 incoming)</param>
+		/// <param name="a_bSpecial">Use special float style (physical-hit style)</param>
+		virtual void ShowFloatingCombatText(RE::ActorHandle a_actorHandle, float a_damage, uint32_t a_color = 0xFFFFFF, bool a_bSpecial = false) noexcept = 0;
+
+		/// <summary>
+		/// Show arbitrary floating world text at a world position. Respects floating-text MCM toggles.
+		/// </summary>
+		virtual void ShowFloatingWorldText(std::string_view a_text, const RE::NiPoint3& a_worldPosition, uint32_t a_color = 0xFFFFFF, float a_duration = 2.f, bool a_bSpecial = false) noexcept = 0;
+	};
+
+	class IVTrueHUD6 : public IVTrueHUD5
+	{
+	public:
+		/// <summary>
+		/// Drive player hunger / thirst / energy bars on the PlayerWidget (0–100).
+		/// Vampire hides thirst and restyles hunger as blood. Recovering greys energy.
+		/// </summary>
+		virtual void SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering) noexcept = 0;
+	};
+
 	typedef void* (*_RequestPluginAPI)(const InterfaceVersion interfaceVersion);
 
 	/// <summary>
@@ -391,7 +421,7 @@ namespace TRUEHUD_API
 	/// </summary>
 	/// <param name="a_interfaceVersion">The interface version to request</param>
 	/// <returns>The pointer to the API singleton, or nullptr if request failed</returns>
-	[[nodiscard]] inline void* RequestPluginAPI(const InterfaceVersion a_interfaceVersion = InterfaceVersion::V4)
+	[[nodiscard]] inline void* RequestPluginAPI(const InterfaceVersion a_interfaceVersion = InterfaceVersion::V6)
 	{
 		auto pluginHandle = GetModuleHandle("TrueHUD.dll");
 		_RequestPluginAPI requestAPIFunction = (_RequestPluginAPI)GetProcAddress(pluginHandle, "RequestPluginAPI");

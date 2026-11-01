@@ -232,7 +232,14 @@ HUDHandler::EventResult HUDHandler::ProcessEvent(const RE::MenuOpenCloseEvent* a
 			HUDHandler::GetSingleton()->OpenTrueHUDMenu();
 		} else {
 			HUDHandler::GetSingleton()->CloseTrueHUDMenu();
+			HUDHandler::GetSingleton()->SetMenuVisibilityMode(MenuVisibilityMode::kHidden);
+			return EventResult::kContinue;
 		}
+	}
+
+	if (!RE::UI::GetSingleton()->IsMenuOpen(RE::HUDMenu::MENU_NAME)) {
+		HUDHandler::GetSingleton()->SetMenuVisibilityMode(MenuVisibilityMode::kHidden);
+		return EventResult::kContinue;
 	}
 
 	// Hide the widgets when a menu is open
@@ -593,6 +600,13 @@ void HUDHandler::FlashActorSpecialBar(RE::ObjectRefHandle a_actorHandle, bool a_
 {
 	AddHUDTask([a_actorHandle, a_bLong](TrueHUDMenu& a_menu) {
 		a_menu.FlashActorSpecialBar(a_actorHandle, a_bLong);
+	});
+}
+
+void HUDHandler::SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering)
+{
+	AddHUDTask([a_hungerPct, a_thirstPct, a_energyPct, a_vampire, a_recovering](TrueHUDMenu& a_menu) {
+		a_menu.SetPlayerNeeds(a_hungerPct, a_thirstPct, a_energyPct, a_vampire, a_recovering);
 	});
 }
 

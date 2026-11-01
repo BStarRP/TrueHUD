@@ -280,6 +280,9 @@ namespace Scaleform
 
 				_playerWidget->_object = obj;
 				_playerWidget->Initialize();
+				if (_needPending) {
+					_playerWidget->SetPlayerNeeds(_needHungerPct, _needThirstPct, _needEnergyPct, _needVampire, _needRecovering);
+				}
 				return true;
 			}
 		}
@@ -584,6 +587,20 @@ namespace Scaleform
 			auto& widget = iter->second;
 			widget->FlashSpecial(a_bLong);
 			return;
+		}
+	}
+
+	void TrueHUDMenu::SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering)
+	{
+		Locker locker(_lock);
+		_needHungerPct = a_hungerPct;
+		_needThirstPct = a_thirstPct;
+		_needEnergyPct = a_energyPct;
+		_needVampire = a_vampire;
+		_needRecovering = a_recovering;
+		_needPending = true;
+		if (_playerWidget) {
+			_playerWidget->SetPlayerNeeds(a_hungerPct, a_thirstPct, a_energyPct, a_vampire, a_recovering);
 		}
 	}
 
@@ -1353,7 +1370,7 @@ namespace Scaleform
 			}
 		}
 
-		if (Settings::bEnablePlayerWidget && !_playerWidget) {
+		if (Settings::bEnablePlayerWidget && !_playerWidget && _bIsOpen) {
 			AddPlayerWidget();
 		} else if (!Settings::bEnablePlayerWidget && _playerWidget) {
 			RemovePlayerWidget();

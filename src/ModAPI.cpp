@@ -2,6 +2,9 @@
 #include "HUDHandler.h"
 #include "Settings.h"
 
+#include <cmath>
+#include <string>
+
 namespace Messaging
 {
 	TrueHUDInterface::TrueHUDInterface() noexcept
@@ -333,6 +336,35 @@ namespace Messaging
 			return hudHandler->HasActorInfoBar(a_actorHandle);
 		} else {
 			return hudHandler->HasActorInfoBar(a_actorHandle) || hudHandler->HasBossInfoBar(a_actorHandle);
+		}
+	}
+
+	void TrueHUDInterface::ShowFloatingCombatText(RE::ActorHandle a_actorHandle, float a_damage, uint32_t a_color, bool a_bSpecial) noexcept
+	{
+		if (!(Settings::bEnableFloatingText && Settings::bEnableFloatingCombatText) || a_damage <= 0.f) {
+			return;
+		}
+		auto actor = a_actorHandle.get();
+		if (!actor) {
+			return;
+		}
+		const auto text = std::to_string(static_cast<int32_t>(ceil(a_damage)));
+		HUDHandler::GetSingleton()->AddFloatingWorldTextWidget(text, a_color, 2.f, a_bSpecial, actor->GetLookingAtLocation());
+	}
+
+	void TrueHUDInterface::ShowFloatingWorldText(std::string_view a_text, const RE::NiPoint3& a_worldPosition, uint32_t a_color, float a_duration, bool a_bSpecial) noexcept
+	{
+		if (!Settings::bEnableFloatingText || a_text.empty()) {
+			return;
+		}
+		HUDHandler::GetSingleton()->AddFloatingWorldTextWidget(std::string(a_text), a_color, a_duration, a_bSpecial, a_worldPosition);
+	}
+
+	void TrueHUDInterface::SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering) noexcept
+	{
+		auto hudHandler = HUDHandler::GetSingleton();
+		if (hudHandler) {
+			hudHandler->SetPlayerNeeds(a_hungerPct, a_thirstPct, a_energyPct, a_vampire, a_recovering);
 		}
 	}
 

@@ -158,6 +158,7 @@ namespace Scaleform
 
 		void FlashActorValue(RE::ObjectRefHandle a_actorHandle, RE::ActorValue a_actorValue, bool a_bLong);
 		void FlashActorSpecialBar(RE::ObjectRefHandle a_actorHandle, bool a_bLong);
+		void SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering);
 
 		void OverrideBarColor(RE::ObjectRefHandle a_actorHandle, RE::ActorValue a_actorValue, BarColorType a_colorType, uint32_t a_color);
 		void OverrideSpecialBarColor(RE::ObjectRefHandle a_actorHandle, BarColorType a_colorType, uint32_t a_color);
@@ -344,6 +345,12 @@ namespace Scaleform
 		std::unordered_map<RE::ObjectRefHandle, std::shared_ptr<BossInfoBar>> _bossInfoBarMap;
 		std::shared_ptr<ShoutIndicator> _shoutIndicator;
 		std::shared_ptr<PlayerWidget> _playerWidget;
+		float _needHungerPct = 0.f;
+		float _needThirstPct = 0.f;
+		float _needEnergyPct = 0.f;
+		bool _needVampire = false;
+		bool _needRecovering = false;
+		bool _needPending = false;
 		std::shared_ptr<RecentLoot> _recentLoot;
 		std::unordered_map<uint32_t, std::shared_ptr<FloatingText>> _floatingTextMap;
 		uint32_t _nextFloatingTextID = 0;

@@ -10,6 +10,8 @@ namespace Messaging
 	using InterfaceVersion2 = ::TRUEHUD_API::IVTrueHUD2;
 	using InterfaceVersion3 = ::TRUEHUD_API::IVTrueHUD3;
 	using InterfaceVersion4 = ::TRUEHUD_API::IVTrueHUD4;
+	using InterfaceVersion5 = ::TRUEHUD_API::IVTrueHUD5;
+	using InterfaceVersion6 = ::TRUEHUD_API::IVTrueHUD6;
 	using PlayerWidgetBarType = ::TRUEHUD_API::PlayerWidgetBarType;
 	using BarColorType = ::TRUEHUD_API::BarColorType;
 	using WidgetRemovalMode = ::TRUEHUD_API::WidgetRemovalMode;
@@ -19,7 +21,7 @@ namespace Messaging
 
 	using WidgetBase = ::TRUEHUD_API::WidgetBase;
 
-	class TrueHUDInterface : public InterfaceVersion4
+	class TrueHUDInterface : public InterfaceVersion6
 	{
 	private:
 		TrueHUDInterface() noexcept;
@@ -77,6 +79,13 @@ namespace Messaging
 
 		// InterfaceVersion4
 		virtual void DrawCapsule(const RE::NiPoint3& a_vertexA, const RE::NiPoint3& a_vertexB, float a_radius, float a_duration, uint32_t a_color, float a_thickness) noexcept override;
+
+		// InterfaceVersion5
+		virtual void ShowFloatingCombatText(RE::ActorHandle a_actorHandle, float a_damage, uint32_t a_color, bool a_bSpecial) noexcept override;
+		virtual void ShowFloatingWorldText(std::string_view a_text, const RE::NiPoint3& a_worldPosition, uint32_t a_color, float a_duration, bool a_bSpecial) noexcept override;
+
+		// InterfaceVersion6
+		virtual void SetPlayerNeeds(float a_hungerPct, float a_thirstPct, float a_energyPct, bool a_vampire, bool a_recovering) noexcept override;
 
 		// Does a mod have control over the current target?
 		bool IsTargetControlTaken() const noexcept;

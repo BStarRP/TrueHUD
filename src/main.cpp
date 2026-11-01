@@ -135,6 +135,10 @@ extern "C" DLLEXPORT void* SKSEAPI RequestPluginAPI(const TRUEHUD_API::Interface
 	case TRUEHUD_API::InterfaceVersion::V3:
 		[[fallthrough]];
 	case TRUEHUD_API::InterfaceVersion::V4:
+		[[fallthrough]];
+	case TRUEHUD_API::InterfaceVersion::V5:
+		[[fallthrough]];
+	case TRUEHUD_API::InterfaceVersion::V6:
 		logger::info("TrueHUD::RequestPluginAPI returned the API singleton");
 		return static_cast<void*>(api);
 	}
